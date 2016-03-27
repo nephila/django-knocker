@@ -53,7 +53,8 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
-        'channels'
+        'channels',
+        'django-meta>=1.0b3'
     ],
     license='BSD',
     zip_safe=False,

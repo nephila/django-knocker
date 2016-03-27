@@ -5,10 +5,14 @@ from django.utils.translation import override, get_language
 
 
 def notify_items(**kwargs):
+    """
+    Signal endpoint that actually sends knocks whenever an instance is created / saved
+    """
     instance = kwargs.get('instance')
     created = kwargs.get('created', False)
     if hasattr(instance, 'send_knock'):
         try:
+            # This is a stupid generic interface for multilanguage models (hvad / parler)
             if hasattr(instance, 'get_available_languages'):
                 langs = instance.get_available_languages()
             else:
