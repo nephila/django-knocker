@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-from django.utils.translation import override, get_language
+from django.utils.translation import get_language, override
 
 
 def notify_items(**kwargs):

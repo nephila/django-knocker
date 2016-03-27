@@ -2,20 +2,58 @@
 
 language: python
 
-python:
-  - "3.5"
-  - "3.4"
-  - "3.3"
-  - "2.7"
+sudo: false
 
-before_install:
-  - pip install codecov
+python:
+  - 3.5
+  - 3.4
+  - 3.3
+  - 2.7
+
+env:
+  matrix:
+  - TOXENV='pep8'
+  - TOXENV='isort'
+
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install -r requirements-test.txt
+install:
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PYVER=py27; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export PYVER=py33; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then export PYVER=py34; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export PYVER=py35; fi"
+  - "if [[ ${DJANGO}z != 'z' ]]; then export TOXENV=$PYVER-$DJANGO-$CMS; fi"
 
-# command to run tests using coverage, e.g. python setup.py test
-script: coverage run --source knocker runtests.py
+# command to run tests, e.g. python setup.py test
+script: COMMAND='coverage run' tox -e$TOXENV
 
+before_install:
+  - pip install -U tox>=1.8 coveralls codecov wheel pip
 after_success:
   - codecov
+  - coveralls
+
+matrix:
+  exclude:
+  - python: 2.7
+    env: TOXENV='pep8'
+  - python: 2.7
+    env: TOXENV='isort'
+  - python: 3.3
+    env: TOXENV='pep8'
+  - python: 3.3
+    env: TOXENV='isort'
+  - python: 3.4
+    env: TOXENV='pep8'
+  - python: 3.4
+    env: TOXENV='isort'
+  - python: 3.3
+    env: DJANGO='django19'
+
+
+cache:
+   directories:
+     - $HOME/.pip-accel
+     - $HOME/.cache/pip
+
+

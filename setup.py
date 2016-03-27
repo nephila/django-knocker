@@ -23,7 +23,7 @@ version = get_version('knocker', '__init__.py')
 
 if sys.argv[-1] == 'publish':
     try:
-        import wheel
+        import wheel  # noqa
     except ImportError:
         print('Wheel library missing. Please run "pip install wheel"')
         sys.exit()
@@ -56,6 +56,7 @@ setup(
         'channels',
         'django-meta>=1.0b3'
     ],
+    test_suite='cms_helper.run',
     license='BSD',
     zip_safe=False,
     keywords='django-knocker',
