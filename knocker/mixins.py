@@ -18,6 +18,7 @@ class KnockerModel(object):
         'title': 'get_knocker_title',
         'message': 'get_title',
         'icon': 'get_knocker_icon',
+        'url': 'get_full_url',
         'language': 'get_current_language',
     }
 
