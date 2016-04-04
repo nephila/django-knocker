@@ -20,5 +20,5 @@ def notify_items(**kwargs):
             for lang in langs:
                 with override(lang):
                     instance.send_knock(created)
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             pass

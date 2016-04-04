@@ -7,7 +7,7 @@ from channels import Group
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import get_language, ugettext_lazy as _
 
 from .signals import notify_items  # NOQA
 
@@ -16,10 +16,10 @@ class KnockerModel(object):
 
     _knocker_data = {
         'title': 'get_knocker_title',
-        'message': 'get_title',
+        'message': 'get_knocker_message',
         'icon': 'get_knocker_icon',
         'url': 'get_full_url',
-        'language': 'get_current_language',
+        'language': 'get_knocker_language',
     }
 
     def __init__(self, *args, **kwargs):
@@ -38,9 +38,29 @@ class KnockerModel(object):
         """
         Generic function to return the knock title.
 
-        Defaults to 'new model_verbose_name'
+        Defaults to 'new `model_verbose_name`'
         """
         return force_text(_('new {0}'.format(self._meta.verbose_name)))
+
+    def get_knocker_message(self):
+        """
+        Generic function to return the knock message.
+
+        Defaults to calling ``self.get_title``
+        """
+        return self.get_title()
+
+    def get_knocker_language(self):
+        """
+        Returns the current language.
+
+        This will call ``selg.get_current_language`` if available or the Django
+        ``django.utils.translation.get_language()`` otherwise
+        """
+        if hasattr(self, 'get_current_language'):
+            return self.get_current_language()
+        else:
+            return get_language()
 
     def should_knock(self, created=False):
         """
