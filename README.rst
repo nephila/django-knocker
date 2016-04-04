@@ -38,24 +38,20 @@ Documentation
 
 The full documentation is at https://django-knocker.readthedocs.org.
 
-Quickstart
-----------
+Usage
+-----
 
-Install django-knocker::
-
-    pip install django-knocker
-
-Then use it in a project::
-
-    import knocker
+See https://django-knocker.readthedocs.org/en/latest/usage.rst
 
 Features
 --------
 
-* TODO
+* Sends desktop notifications to connected browsers
+* Multilianguage support (with `django-parler`_ and `django-hvad`_)
+* Uses `django-meta`_ API for a consistent metadata handling
 
 Running Tests
---------------
+-------------
 
 Does the code actually work?
 
@@ -63,15 +59,18 @@ Does the code actually work?
 
     source <YOURVIRTUALENV>/bin/activate
     (myenv) $ pip install -r requirements-test.txt
-    (myenv) $ python runtests.py
+    (myenv) $ python setup.py test
 
 Credits
----------
+-------
 
 Tools used in rendering this package:
 
 *  Cookiecutter_
-*  `cookiecutter-pypackage`_
+*  `cookiecutter-djangopackage-helper`_
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`cookiecutter-djangopackage-helper`: https://github.com/nephila/cookiecutter-djangopackage-helper
+.. _django-hvad: https://github.com/KristianOellegaard/django-hvad
+.. _django-parler: https://github.com/edoburu/django-parler
+.. _django-meta: https://github.com/nephila/django-meta
