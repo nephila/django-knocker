@@ -1,7 +1,8 @@
+-r requirements.txt
 coverage
 mock>=1.0.1
 flake8>=2.1.0
 tox>=1.7.0
 djangocms-helper
-
-# Additional test requirements go here
+django-parler
+asgi-redis

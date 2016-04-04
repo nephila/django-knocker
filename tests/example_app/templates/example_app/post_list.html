@@ -1,0 +1,15 @@
+{% load sekizai_tags meta %}
+<!DOCTYPE html>
+<html {% render_block 'html_extra' %}>
+<head {% meta_namespaces %}>
+    {% include "meta/meta.html" %}
+</head>
+<body>
+
+<ul>
+    {% for post in object_list %}
+        <li><a href="{% url 'post-detail' post.slug %}">{{ post.title }}</a></li>
+    {% endfor %}
+</ul>
+</body>
+</html>
