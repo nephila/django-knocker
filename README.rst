@@ -41,7 +41,7 @@ The full documentation is at https://django-knocker.readthedocs.org.
 Usage
 -----
 
-See https://django-knocker.readthedocs.org/en/latest/usage.rst
+See http://django-knocker.readthedocs.org/en/latest/usage.html
 
 Features
 --------
