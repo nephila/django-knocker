@@ -16,7 +16,7 @@ from meta.models import ModelMeta
 
 class Post(KnockerModel, ModelMeta, models.Model):
     """
-    Blog post
+    Basic model
     """
     title = models.CharField(_('Title'), max_length=255)
     slug = models.SlugField(_('slug'))
@@ -43,7 +43,7 @@ class Post(KnockerModel, ModelMeta, models.Model):
     class Meta:
         verbose_name = _('blog article')
         verbose_name_plural = _('blog articles')
-        ordering = ("-date_published", "-date_created")
+        ordering = ('-date_published', '-date_created')
         get_latest_by = 'date_published'
 
     def get_title(self):
@@ -57,6 +57,9 @@ class Post(KnockerModel, ModelMeta, models.Model):
 
 
 class MultiLanguagePost(KnockerModel, ModelMeta, TranslatableModel):
+    """
+    Parler model
+    """
     translations = TranslatedFields(
         title=models.CharField(_('title'), max_length=255),
         slug=models.SlugField(_('slug'), blank=True, db_index=True),
@@ -72,20 +75,23 @@ class MultiLanguagePost(KnockerModel, ModelMeta, TranslatableModel):
     def __unicode__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse('parler-post-detail', kwargs={'slug': self.slug})
+    def get_absolute_url(self, language):
+        return reverse('post-detail', kwargs={'slug': self.slug})
 
     def should_knock(self, created=False):
         return self.get_current_language() != 'fr'
 
 
 class NoKnockPost(models.Model):
+    """
+    Model without knock
+    """
     title = models.CharField(_('title'), max_length=255)
     slug = models.SlugField(_('slug'), blank=True, db_index=True)
 
     class Meta:
-        verbose_name = _('no knocj blog article')
-        verbose_name_plural = _('no knocj blog articles')
+        verbose_name = _('no knock blog article')
+        verbose_name_plural = _('no knock blog articles')
 
 
 post_save.connect(notify_items, sender=NoKnockPost)
