@@ -28,6 +28,7 @@ cms_helper.setup()
 import sphinx.environment
 from docutils.utils import get_source_line
 
+
 def _warn_node(self, msg, node):
     if not msg.startswith('nonlocal image URI found:'):
         self._warnfunc(msg, '%s:%s' % get_source_line(node))
