@@ -24,7 +24,25 @@ class KnockerModel(object):
 
     def __init__(self, *args, **kwargs):
         super(KnockerModel, self).__init__(*args, **kwargs)
-        post_save.connect(notify_items, sender=self.__class__)
+        self._connect()
+
+    def _connect(self):
+        """
+        Connect signal to current model
+        """
+        post_save.connect(
+            notify_items, sender=self.__class__,
+            dispatch_uid='knocker_{0}'.format(self.__class__.__name__)
+        )
+
+    def _disconnect(self):
+        """
+        Disconnect signal from current model
+        """
+        post_save.disconnect(
+            notify_items, sender=self.__class__,
+            dispatch_uid='knocker_{0}'.format(self.__class__.__name__)
+        )
 
     def get_knocker_icon(self):
         """
