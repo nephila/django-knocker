@@ -3,6 +3,12 @@
 History
 -------
 
+0.2.0 (2016-06-11)
+++++++++++++++++++
+
+* Fixed documentation
+* Improved routing setting in tests
+
 0.1.1 (2016-04-08)
 ++++++++++++++++++
 
