@@ -38,7 +38,7 @@ HELPER_SETTINGS = dict(
             'CONFIG': {
                 'hosts': [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
             },
-            'ROUTING': 'knocker.routing.channel_routing',
+            'ROUTING': 'tests.example_app.routing.channel_routing',
         },
     }
 )
