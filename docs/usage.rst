@@ -18,9 +18,9 @@ knocker-enabled models is saved, a desktop notification is emitted.
 
 .. _api:
 
-==========
+===========
 Knocker API
-==========
+===========
 
 The Knocker API is a very thin layer of syntactic sugar on top of `django-meta`_ and `channels`_.
 
