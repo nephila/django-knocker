@@ -87,4 +87,4 @@ Methods
 .. _django-parler: https://github.com/edoburu/django-parler
 .. _django-meta: https://github.com/nephila/django-meta
 .. _channels: https://github.com/andrewgodwin/channels
-.. _channels documentation: http://channels.readthedocs.org/en/latest/deploying.html
+.. _channels documentation: https://channels.readthedocs.io/en/latest/deploying.html
