@@ -36,12 +36,12 @@ Channels-based desktop notification system
 Documentation
 -------------
 
-The full documentation is at https://django-knocker.readthedocs.org.
+The full documentation is at https://django-knocker.readthedocs.io.
 
 Usage
 -----
 
-See http://django-knocker.readthedocs.org/en/latest/usage.html
+See https://django-knocker.readthedocs.io/en/latest/usage.html
 
 Features
 --------
