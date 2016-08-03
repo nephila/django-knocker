@@ -8,8 +8,17 @@ After installing and configuring it, you need to adapt your models to use ``knoc
 
 * Override  the `api`_ if needed
 
-* Load ``{% static "js/knocker.js" %}`` and ``{% static "js/reconnecting-websocket.min" %}`` into
+* Load ``{% static "js/knocker.js" %}`` and ``{% static "js/reconnecting-websocket.min.js" %}`` into
   the templates
+
+* Add the following code::
+
+    <script type="text/javascript">
+      var knocker_language = '{{ LANGUAGE_CODE }}';
+      var knocker_url = '/notifications';  // Set this to the actual URL
+    </script>
+
+  The value of ``knocker_url`` must match the path configured in ``myproject.routing.channel_routing.py``.
 
 * Deploy you project according to the `channels documentation`_
 
