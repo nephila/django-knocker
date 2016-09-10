@@ -24,7 +24,7 @@ function addNotification(notification) {
     data = {
       body: notification.message,
       icon: notification.icon,
-      tag: 'notifications_' + language_code,
+      tag: 'notifications_' + notification.language,
       url: notification.url
     };
     var note = new Notification(notification.title, data);
