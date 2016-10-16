@@ -25,6 +25,12 @@ After installing and configuring it, you need to adapt your models to use ``knoc
 Now, for every user which has of the knocker-enabled pages opened, whenever an instance of your
 knocker-enabled models is saved, a desktop notification is emitted.
 
+Knocker provides a default signal which is fired whenever a model instance is saved and is registered automatically.
+
+If you have any issue with signal firing, please `open an issue`_.
+
+For a complete implementation of a knocker-enabled application refer to the `sample app`_ included in knocker tests.
+
 .. _api:
 
 ===========
@@ -66,14 +72,14 @@ entirely redefined in the model class::
         def get_message(self):
             return self.title
 
-        def get_my_message(self):
+        def get_my_title(self):
             return 'hello'
 
 Attributes
 ##########
 
 * title: the title that appears in the desktop notification; defaults to
-  ``New Model verbose name``;
+  ``New Model {{ verbose name }}``;
 * message: the content of the desktop notification; default to the result of ``self.get_title``
   on the model instance;
 * icon: an icon displayed on the notification; defaults to the value of ``KNOCKER_ICON_URL``;
@@ -97,3 +103,5 @@ Methods
 .. _django-meta: https://github.com/nephila/django-meta
 .. _channels: https://github.com/andrewgodwin/channels
 .. _channels documentation: https://channels.readthedocs.io/en/latest/deploying.html
+.. _sample app: https://github.com/nephila/django-knocker/tree/master/tests/example_app
+.. _open an issue: https://github.com/nephila/django-knocker/issues
