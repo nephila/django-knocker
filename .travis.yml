@@ -12,8 +12,9 @@ python:
 
 env:
   matrix:
-  - DJANGO='django18'
+  - DJANGO='django110'
   - DJANGO='django19'
+  - DJANGO='django18'
   - TOXENV='pep8'
   - TOXENV='isort'
   - TOXENV='docs'
@@ -60,6 +61,8 @@ matrix:
     env: TOXENV='docs'
   - python: 3.3
     env: DJANGO='django19'
+  - python: 3.3
+    env: DJANGO='django110'
 
 
 cache:
