@@ -25,8 +25,10 @@ def notify_items(**kwargs):
             for lang in langs:
                 with override(lang):
                     instance.send_knock(created)
+            return True
         except AttributeError:  # pragma: no cover
             pass
+    return False
 
 
 def active_knocks(obj):
@@ -34,10 +36,10 @@ def active_knocks(obj):
     Checks whether knocks are enabled for the model given as argument
 
     :param obj: model instance
-    :return True if knocks are paused
+    :return True if knocks are active
     """
     if not hasattr(_thread_locals, 'knock_enabled'):
-        return False
+        return True
     return _thread_locals.knock_enabled.get(obj.__class__, True)
 
 
