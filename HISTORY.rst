@@ -3,6 +3,11 @@
 History
 -------
 
+0.3.3 (unreleased)
+++++++++++++++++++
+
+* Fixed error in signal handling
+
 0.3.2 (2016-12-02)
 ++++++++++++++++++
 
