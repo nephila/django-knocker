@@ -6,6 +6,7 @@ from django.utils.translation import get_language, override
 from mock import patch
 from parler.utils.context import smart_override
 
+from knocker.signals import pause_knocks, active_knocks
 from .base import BaseKnocker
 from .example_app.models import Post, MultiLanguagePost, NoKnockPost
 
@@ -14,16 +15,16 @@ class KnockerTest(BaseKnocker):
 
     def test_model_attributes(self):
         posts = []
-        posts.append(Post.objects.create(
+        posts.append(MultiLanguagePost.objects.create(
             title='first post',
             slug='first-post',
         ))
-        posts.append(Post.objects.create(
+        posts.append(MultiLanguagePost.objects.create(
             title='second post',
             slug='second-post',
         ))
 
-        for language in get_language():
+        for language in [get_language()]:
             with override(language):
                 for post in posts:
                     knock_create = post.as_knock(True)
@@ -96,3 +97,31 @@ class KnockerTest(BaseKnocker):
             slug='second-post',
         ))
         self.assertEqual(handler.call_count, 2)
+
+    @patch('knocker.mixins.notify_items')
+    def test_signal(self, handler):
+        post = Post.objects.create(
+            title='signal post',
+            slug='signal-post',
+        )
+        handler.assert_called_once()
+        self.assertTrue(handler.return_value)
+        handler.reset_mock()
+
+        post.title = 'mod title'
+        post.save()
+        handler.assert_called_once()
+        self.assertTrue(handler.return_value)
+        handler.reset_mock()
+
+        with pause_knocks(post):
+            post.title = 'pause title'
+            post.save()
+            self.assertFalse(active_knocks(post))
+            handler.assert_not_called()
+
+        post.title = 'mod title'
+        post.save()
+        handler.assert_called_once()
+        self.assertTrue(handler.return_value)
+        handler.reset_mock()
