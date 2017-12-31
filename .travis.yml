@@ -5,13 +5,14 @@ language: python
 sudo: false
 
 python:
+  - 3.6
   - 3.5
   - 3.4
-  - 3.3
   - 2.7
 
 env:
   matrix:
+  - DJANGO='django111'
   - DJANGO='django110'
   - DJANGO='django19'
   - DJANGO='django18'
@@ -25,9 +26,9 @@ services:
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export PYVER=py27; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then export PYVER=py33; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then export PYVER=py34; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then export PYVER=py35; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then export PYVER=py35; fi"
   - "if [[ ${DJANGO}z != 'z' ]]; then export TOXENV=$PYVER-$DJANGO; fi"
 
 # command to run tests, e.g. python setup.py test
@@ -47,22 +48,18 @@ matrix:
     env: TOXENV='isort'
   - python: 2.7
     env: TOXENV='docs'
-  - python: 3.3
-    env: TOXENV='pep8'
-  - python: 3.3
-    env: TOXENV='isort'
-  - python: 3.3
-    env: TOXENV='docs'
   - python: 3.4
     env: TOXENV='pep8'
   - python: 3.4
     env: TOXENV='isort'
   - python: 3.4
     env: TOXENV='docs'
-  - python: 3.3
-    env: DJANGO='django19'
-  - python: 3.3
-    env: DJANGO='django110'
+  - python: 3.5
+    env: TOXENV='pep8'
+  - python: 3.5
+    env: TOXENV='isort'
+  - python: 3.5
+    env: TOXENV='docs'
 
 
 cache:
