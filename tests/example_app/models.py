@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from parler.models import TranslatedFields, TranslatableModel
 
@@ -14,6 +15,7 @@ from knocker.signals import notify_items
 from meta.models import ModelMeta
 
 
+@python_2_unicode_compatible
 class Post(KnockerModel, ModelMeta, models.Model):
     """
     Basic model
@@ -49,13 +51,14 @@ class Post(KnockerModel, ModelMeta, models.Model):
     def get_title(self):
         return self.title
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'slug': self.slug})
 
 
+@python_2_unicode_compatible
 class MultiLanguagePost(KnockerModel, ModelMeta, TranslatableModel):
     """
     Parler model
@@ -72,7 +75,7 @@ class MultiLanguagePost(KnockerModel, ModelMeta, TranslatableModel):
     def get_title(self):
         return self.title
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def get_absolute_url(self, language):
@@ -82,6 +85,7 @@ class MultiLanguagePost(KnockerModel, ModelMeta, TranslatableModel):
         return self.get_current_language() != 'fr'
 
 
+@python_2_unicode_compatible
 class NoKnockPost(models.Model):
     """
     Model without knock
@@ -92,6 +96,9 @@ class NoKnockPost(models.Model):
     class Meta:
         verbose_name = _('no knock blog article')
         verbose_name_plural = _('no knock blog articles')
+
+    def __str__(self):
+        return self.title
 
 
 post_save.connect(notify_items, sender=NoKnockPost)

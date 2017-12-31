@@ -15,6 +15,7 @@ def ws_connect(message):
     gr = Group('knocker-{0}'.format(language))
     gr.add(message.reply_channel)
     message.channel_session['knocker'] = language
+    message.reply_channel.send({"accept": True})
 
 
 @channel_session
