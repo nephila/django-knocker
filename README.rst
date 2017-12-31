@@ -6,10 +6,6 @@ django-knocker
     :target: https://pypi.python.org/pypi/django-knocker
     :alt: Latest PyPI version
 
-.. image:: https://img.shields.io/pypi/dm/django-knocker.svg?style=flat-square
-    :target: https://pypi.python.org/pypi/django-knocker
-    :alt: Monthly downloads
-
 .. image:: https://img.shields.io/pypi/pyversions/django-knocker.svg?style=flat-square
     :target: https://pypi.python.org/pypi/django-knocker
     :alt: Python versions
@@ -20,10 +16,6 @@ django-knocker
 
 .. image:: https://img.shields.io/coveralls/nephila/django-knocker/master.svg?style=flat-square
     :target: https://coveralls.io/r/nephila/django-knocker?branch=master
-    :alt: Test coverage
-
-.. image:: https://img.shields.io/codecov/c/github/nephila/django-knocker/develop.svg?style=flat-square
-    :target: https://codecov.io/github/nephila/django-knocker
     :alt: Test coverage
 
 .. image:: https://codeclimate.com/github/nephila/django-knocker/badges/gpa.svg?style=flat-square

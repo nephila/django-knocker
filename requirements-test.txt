@@ -6,3 +6,4 @@ tox>=1.7.0
 djangocms-helper
 django-parler
 asgi-redis
+pillow
