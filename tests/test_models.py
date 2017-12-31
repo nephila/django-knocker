@@ -13,6 +13,11 @@ from .example_app.models import Post, MultiLanguagePost, NoKnockPost
 
 class KnockerTest(BaseKnocker):
 
+    def tearDown(self):
+        MultiLanguagePost._disconnect()
+        Post._disconnect()
+        super(KnockerTest, self).tearDown()
+
     def test_model_attributes(self):
         posts = []
         posts.append(MultiLanguagePost.objects.create(

@@ -22,26 +22,29 @@ class KnockerModel(object):
         'language': 'get_knocker_language',
     }
 
-    def __init__(self, *args, **kwargs):
-        super(KnockerModel, self).__init__(*args, **kwargs)
-        self._connect()
+    def __new__(cls, *args, **kwargs):
+        new_cls = object.__new__(cls)
+        new_cls._connect()
+        return new_cls
 
-    def _connect(self):
+    @classmethod
+    def _connect(cls):
         """
         Connect signal to current model
         """
         post_save.connect(
-            notify_items, sender=self.__class__,
-            dispatch_uid='knocker_{0}'.format(self.__class__.__name__)
+            notify_items, sender=cls,
+            dispatch_uid='knocker_{0}'.format(cls.__name__)
         )
 
-    def _disconnect(self):
+    @classmethod
+    def _disconnect(cls):
         """
         Disconnect signal from current model
         """
         post_save.disconnect(
-            notify_items, sender=self.__class__,
-            dispatch_uid='knocker_{0}'.format(self.__class__.__name__)
+            notify_items, sender=cls,
+            dispatch_uid='knocker_{0}'.format(cls.__name__)
         )
 
     def get_knocker_icon(self):

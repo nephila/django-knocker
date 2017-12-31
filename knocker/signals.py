@@ -52,8 +52,8 @@ def pause_knocks(obj):
     """
     if not hasattr(_thread_locals, 'knock_enabled'):
         _thread_locals.knock_enabled = {}
-    obj._disconnect()
+    obj.__class__._disconnect()
     _thread_locals.knock_enabled[obj.__class__] = False
     yield
     _thread_locals.knock_enabled[obj.__class__] = True
-    obj._connect()
+    obj.__class__._connect()

@@ -3,10 +3,16 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from channels.test import ChannelTestCase, WSClient
 
-from tests.example_app.models import NoKnockPost, Post
+from tests.example_app.models import NoKnockPost, Post, MultiLanguagePost
 
 
 class KnockerConsumerTest(ChannelTestCase):
+
+    def tearDown(self):
+        MultiLanguagePost._disconnect()
+        Post._disconnect()
+        super(KnockerConsumerTest, self).tearDown()
+
     def test_connect(self):
         client = WSClient()
 
