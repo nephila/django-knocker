@@ -3,10 +3,13 @@
 History
 -------
 
-0.3.3 (unreleased)
+0.3.3 (2018-01-01)
 ++++++++++++++++++
 
+* Fixed support for newer channel versions
 * Fixed error in signal handling
+* Added support for Django 1.11
+* Improved test coverage
 
 0.3.2 (2016-12-02)
 ++++++++++++++++++

@@ -51,7 +51,7 @@ Does the code actually work?
 
     source <YOURVIRTUALENV>/bin/activate
     (myenv) $ pip install -r requirements-test.txt
-    (myenv) $ python setup.py test
+    (myenv) $ python cms_helper.py
 
 Credits
 -------
