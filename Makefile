@@ -7,13 +7,13 @@ help:
 	@echo "test - run tests quickly with the default Python"
 	@echo "test-all - run tests on every Python version with tox"
 	@echo "coverage - check code coverage quickly with the default Python"
-	@echo "docs - generate Sphinx HTML documentation, including API docs"
 	@echo "release - package and upload a release"
 	@echo "sdist - package"
 
 clean: clean-build clean-pyc
 
 clean-build:
+	python setup.py clean --all
 	rm -fr build/
 	rm -fr dist/
 	rm -fr *.egg-info
@@ -24,7 +24,7 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
-	flake8 knocker tests
+	tox -epep8,isort
 
 test:
 	python setup.py test
@@ -36,19 +36,9 @@ coverage:
 	coverage erase
 	coverage run setup.py test
 	coverage report -m
-	coverage html
-	open htmlcov/index.html
-
-docs:
-	rm -f docs/django-knocker.rst
-	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ knocker
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
-	open docs/_build/html/index.html
 
 release: clean
-	python setup.py sdist bdist_wheel
+	python setup.py clean --all sdist bdist_wheel
 	twine upload dist/*
 
 sdist: clean

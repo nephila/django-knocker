@@ -2,26 +2,7 @@
 django-knocker
 =============================
 
-.. image:: https://img.shields.io/pypi/v/django-knocker.svg?style=flat-square
-    :target: https://pypi.python.org/pypi/django-knocker
-    :alt: Latest PyPI version
-
-.. image:: https://img.shields.io/pypi/pyversions/django-knocker.svg?style=flat-square
-    :target: https://pypi.python.org/pypi/django-knocker
-    :alt: Python versions
-
-.. image:: https://img.shields.io/travis/nephila/django-knocker.svg?style=flat-square
-    :target: https://travis-ci.org/nephila/django-knocker
-    :alt: Latest Travis CI build status
-
-.. image:: https://img.shields.io/coveralls/nephila/django-knocker/master.svg?style=flat-square
-    :target: https://coveralls.io/r/nephila/django-knocker?branch=master
-    :alt: Test coverage
-
-.. image:: https://codeclimate.com/github/nephila/django-knocker/badges/gpa.svg?style=flat-square
-   :target: https://codeclimate.com/github/nephila/django-knocker
-   :alt: Code Climate
-
+|Gitter| |PyPiVersion| |PyVersion| |Status| |TestCoverage| |CodeClimate| |License|
 
 Channels-based desktop notification system
 
@@ -66,3 +47,33 @@ Tools used in rendering this package:
 .. _django-hvad: https://github.com/KristianOellegaard/django-hvad
 .. _django-parler: https://github.com/edoburu/django-parler
 .. _django-meta: https://github.com/nephila/django-meta
+
+
+
+.. |Gitter| image:: https://img.shields.io/badge/GITTER-join%20chat-brightgreen.svg?style=flat-square
+    :target: https://gitter.im/nephila/applications
+    :alt: Join the Gitter chat
+
+.. |PyPiVersion| image:: https://img.shields.io/pypi/v/django-meta.svg?style=flat-square
+    :target: https://pypi.python.org/pypi/django-meta
+    :alt: Latest PyPI version
+
+.. |PyVersion| image:: https://img.shields.io/pypi/pyversions/django-meta.svg?style=flat-square
+    :target: https://pypi.python.org/pypi/django-meta
+    :alt: Python versions
+
+.. |Status| image:: https://img.shields.io/travis/nephila/django-meta.svg?style=flat-square
+    :target: https://travis-ci.org/nephila/django-meta
+    :alt: Latest Travis CI build status
+
+.. |TestCoverage| image:: https://img.shields.io/coveralls/nephila/django-meta/master.svg?style=flat-square
+    :target: https://coveralls.io/r/nephila/django-meta?branch=master
+    :alt: Test coverage
+
+.. |License| image:: https://img.shields.io/github/license/nephila/django-meta.svg?style=flat-square
+   :target: https://pypi.python.org/pypi/django-meta/
+    :alt: License
+
+.. |CodeClimate| image:: https://codeclimate.com/github/nephila/django-meta/badges/gpa.svg?style=flat-square
+   :target: https://codeclimate.com/github/nephila/django-meta
+   :alt: Code Climate
