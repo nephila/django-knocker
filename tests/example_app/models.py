@@ -2,7 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils import timezone
@@ -28,8 +28,7 @@ class Post(KnockerModel, ModelMeta, models.Model):
         blank=True, default='')
     meta_keywords = models.TextField(verbose_name=_(u'Post meta keywords'),
                                      blank=True, default='')
-    author = models.ForeignKey(User, verbose_name=_('Author'), null=True,
-                               blank=True)
+    author = models.ForeignKey(User, verbose_name=_('Author'), null=True, blank=True, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     date_published = models.DateTimeField(_('Published Since'),
