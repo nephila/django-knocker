@@ -1,8 +1,12 @@
-{% load sekizai_tags meta %}
+{% load meta static %}
 <!DOCTYPE html>
-<html {% render_block 'html_extra' %}>
+<html >
 <head {% meta_namespaces %}>
     {% include "meta/meta.html" %}
+    <script>
+        var knocker_url = '/knocker/notification/';
+        var knocker_language = 'en';
+    </script>
 </head>
 <body>
 
@@ -11,5 +15,8 @@
         <li><a href="{% url 'post-detail' post.slug %}">{{ post.title }}</a></li>
     {% endfor %}
 </ul>
+
+<script defer src="{% static "js/knocker.js" %}"></script>
+<script defer src="{% static "channels/js/websocketbridge.js" %}"></script>
 </body>
 </html>

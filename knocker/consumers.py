@@ -1,37 +1,23 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-from channels import Group
-from channels.sessions import channel_session
+from channels.generic.websocket import JsonWebsocketConsumer
 
 
-@channel_session
-def ws_connect(message):
-    """
-    Channels connection setup.
-    Register the current client on the related Group according to the language
-    """
-    prefix, language = message['path'].strip('/').split('/')
-    gr = Group('knocker-{0}'.format(language))
-    gr.add(message.reply_channel)
-    message.channel_session['knocker'] = language
-    message.reply_channel.send({"accept": True})
+class KnockerConsumer(JsonWebsocketConsumer):
 
+    @property
+    def groups(self):
+        """
+        Attach the consumer to the selected language
+        """
+        lang = self.scope['url_route']['kwargs'].get('language')
+        return 'knocker-%s' % lang,
 
-@channel_session
-def ws_receive(message):
-    """
-    Currently no-op
-    """
-    pass
+    def knocker_saved(self, event):
+        """
+        This method handles messages sent to knocker.saved
 
-
-@channel_session
-def ws_disconnect(message):
-    """
-    Channels connection close.
-    Deregister the client
-    """
-    language = message.channel_session['knocker']
-    gr = Group('knocker-{0}'.format(language))
-    gr.discard(message.reply_channel)
+        :param event: event object
+        """
+        self.send_json(content=event['message'])

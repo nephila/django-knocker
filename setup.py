@@ -53,8 +53,8 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
-        'channels<2.0',
-        'django-meta>=1.3'
+        'channels>2.1',
+        'django-meta>=1.4'
     ],
     test_suite='cms_helper.run',
     license='BSD',
@@ -63,10 +63,8 @@ setup(
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Framework :: Django',
-        'Framework :: Django :: 1.8',
-        'Framework :: Django :: 1.9',
-        'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.11',
+        'Framework :: Django :: 2.0',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',

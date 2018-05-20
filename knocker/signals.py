@@ -9,7 +9,23 @@ from django.utils.translation import get_language, override
 _thread_locals = local()
 
 
-def notify_items(**kwargs):
+def notify_items_pre_save(**kwargs):
+    return notify_items(signal_type='pre_save', **kwargs)
+
+
+def notify_items_post_save(**kwargs):
+    return notify_items(signal_type='post_save', **kwargs)
+
+
+def notify_items_pre_delete(**kwargs):
+    return notify_items(signal_type='pre_delete', **kwargs)
+
+
+def notify_items_post_delete(**kwargs):
+    return notify_items(signal_type='post_delete', **kwargs)
+
+
+def notify_items(signal_type, **kwargs):
     """
     Signal endpoint that actually sends knocks whenever an instance is created / saved
     """
@@ -24,7 +40,7 @@ def notify_items(**kwargs):
                 langs = [get_language()]
             for lang in langs:
                 with override(lang):
-                    instance.send_knock(created)
+                    instance.send_knock(signal_type, created)
             return True
         except AttributeError:  # pragma: no cover
             pass

@@ -1,8 +1,16 @@
 # -*- coding: utf-8 -*-
-from channels.routing import include
-from knocker.routing import channel_routing
+from __future__ import absolute_import, print_function, unicode_literals
 
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+from django.urls import path
 
-routing = [
-    include(include(channel_routing), path=r'^/knocker')
-]
+from knocker.routing import channel_routing as knocker_routing
+
+application = ProtocolTypeRouter({
+    'websocket': AuthMiddlewareStack(
+        URLRouter([
+            path('knocker/', knocker_routing),
+        ])
+    ),
+})

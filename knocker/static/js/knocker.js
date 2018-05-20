@@ -7,12 +7,11 @@ window.addEventListener('load', function () {
   });
   // When we're using HTTPS, use WSS too.
   var ws_scheme = window.location.protocol == 'https:' ? 'wss' : 'ws';
-  var notifications = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + knocker_url + '/' + knocker_language);
-
-  notifications.onmessage = function (message) {
-    var data = JSON.parse(message.data);
-    addNotification(data);
-  }
+  var notifications = new channels.WebSocketBridge();
+  notifications.connect(ws_scheme + '://' + window.location.host + knocker_url + knocker_language + '/');
+  notifications.listen(function(message) {
+    addNotification(JSON.parse(message));
+  });
 });
 
 
@@ -21,7 +20,7 @@ function addNotification(notification) {
   // If we have permission to show browser notifications
   // we can show the notification
   if (window.Notification && Notification.permission === 'granted') {
-    data = {
+    var data = {
       body: notification.message,
       icon: notification.icon,
       tag: 'notifications_' + notification.language,

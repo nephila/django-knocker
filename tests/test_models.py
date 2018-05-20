@@ -6,9 +6,10 @@ from django.utils.translation import get_language, override
 from mock import patch
 from parler.utils.context import smart_override
 
-from knocker.signals import pause_knocks, active_knocks
+from knocker.signals import active_knocks, pause_knocks
+
 from .base import BaseKnocker
-from .example_app.models import Post, MultiLanguagePost, NoKnockPost
+from .example_app.models import MultiLanguagePost, NoKnockPost, Post
 
 
 class KnockerTest(BaseKnocker):

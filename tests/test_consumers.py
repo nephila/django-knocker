@@ -2,8 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from channels.test import ChannelTestCase, WSClient
-
-from tests.example_app.models import NoKnockPost, Post, MultiLanguagePost
+from tests.example_app.models import MultiLanguagePost, NoKnockPost, Post
 
 
 class KnockerConsumerTest(ChannelTestCase):
