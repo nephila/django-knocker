@@ -2,9 +2,9 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from django.contrib.auth.models import User
-from django.urls import reverse
 from django.db import models
 from django.db.models.signals import post_save
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from meta.models import ModelMeta
