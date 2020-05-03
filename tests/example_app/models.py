@@ -6,13 +6,13 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from meta.models import ModelMeta
 from parler.models import TranslatableModel, TranslatedFields
+from six import python_2_unicode_compatible
 
 from knocker.mixins import KnockerModel
-from knocker.signals import notify_items
+from knocker.signals import notify_items_post_save
 
 
 @python_2_unicode_compatible
@@ -81,7 +81,7 @@ class MultiLanguagePost(KnockerModel, ModelMeta, TranslatableModel):
     def get_absolute_url(self, language):
         return reverse('post-detail', kwargs={'slug': self.slug})
 
-    def should_knock(self, created=False):
+    def should_knock(self, signal_type, created=False):
         return self.get_current_language() != 'fr'
 
 
@@ -101,4 +101,4 @@ class NoKnockPost(models.Model):
         return self.title
 
 
-post_save.connect(notify_items, sender=NoKnockPost)
+post_save.connect(notify_items_post_save, sender=NoKnockPost)

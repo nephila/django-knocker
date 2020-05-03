@@ -35,6 +35,7 @@ HELPER_SETTINGS = dict(
     FILE_UPLOAD_TEMP_DIR=mkdtemp(),
     META_SITE_PROTOCOL='http',
     ASGI_APPLICATION='tests.example_app.routing.application',
+    TEST_RUNNER='app_helper.pytest_runner.PytestTestRunner',
     CHANNEL_LAYERS={
         'default': {
             'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -47,13 +48,13 @@ HELPER_SETTINGS = dict(
 
 
 def run():
-    from djangocms_helper import runner
+    from app_helper import runner
     runner.run('knocker')
 
 
 def setup():
     import sys
-    from djangocms_helper import runner
+    from app_helper import runner
     runner.setup('knocker', sys.modules[__name__], use_cms=False)
 
 if __name__ == "__main__":

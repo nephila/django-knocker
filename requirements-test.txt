@@ -1,10 +1,12 @@
 -r requirements.txt
 coverage
-mock>=1.0.1
+mock>=3  # needed in python 3.5
 flake8>=2.1.0
 tox>=1.7.0
-djangocms-helper
+django-app-helper
 django-parler
 pillow
 channels-redis
 django-sekizai
+pytest-django
+pytest-asyncio

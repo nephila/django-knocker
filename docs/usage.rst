@@ -101,7 +101,7 @@ Methods
 .. _django-hvad: https://github.com/KristianOellegaard/django-hvad
 .. _django-parler: https://github.com/edoburu/django-parler
 .. _django-meta: https://github.com/nephila/django-meta
-.. _channels: https://github.com/andrewgodwin/channels
+.. _channels: https://github.com/django/channels
 .. _channels documentation: https://channels.readthedocs.io/en/latest/deploying.html
 .. _sample app: https://github.com/nephila/django-knocker/tree/master/tests/example_app
 .. _open an issue: https://github.com/nephila/django-knocker/issues

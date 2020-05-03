@@ -6,7 +6,7 @@ window.addEventListener('load', function () {
     }
   });
   // When we're using HTTPS, use WSS too.
-  var ws_scheme = window.location.protocol == 'https:' ? 'wss' : 'ws';
+  var ws_scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
   var notifications = new channels.WebSocketBridge();
   notifications.connect(ws_scheme + '://' + window.location.host + knocker_url + knocker_language + '/');
   notifications.listen(function(message) {

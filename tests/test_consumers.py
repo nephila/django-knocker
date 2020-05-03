@@ -1,39 +1,53 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-from channels.test import ChannelTestCase, WSClient
-from tests.example_app.models import MultiLanguagePost, NoKnockPost, Post
+import json
+
+import pytest
+from channels.db import database_sync_to_async
+from channels.testing import WebsocketCommunicator
+from django.utils.text import slugify
+from tests.example_app.models import NoKnockPost, Post
+from tests.example_app.routing import application
 
 
-class KnockerConsumerTest(ChannelTestCase):
+@pytest.mark.asyncio
+async def test_consumer_connect():
+    communicator = WebsocketCommunicator(application, "/knocker/notification/en/")
+    connected, __ = await communicator.connect()
+    assert connected
+    assert await communicator.receive_nothing() is True
+    await communicator.disconnect()
 
-    def tearDown(self):
-        MultiLanguagePost._disconnect()
-        Post._disconnect()
-        super(KnockerConsumerTest, self).tearDown()
 
-    def test_connect(self):
-        client = WSClient()
-
-        client.send_and_consume('websocket.connect', path='/knocker/en/')
-        self.assertIsNone(client.receive())
-
-    def test_notification(self):
-        client = WSClient()
-
-        client.send_and_consume('websocket.connect', path='/knocker/en/')
-        post = Post.objects.create(
-            title='first post',
-            slug='first-post',
+@pytest.mark.asyncio
+@pytest.mark.django_db
+async def test_consumer_notification():
+    @database_sync_to_async
+    def get_post(title):
+        return Post.objects.create(
+            title=title,
+            slug=slugify(title),
         )
-        notification = client.receive()
-        self.assertEqual(notification['title'], 'new {0}'.format(post._meta.verbose_name))
-        self.assertEqual(notification['message'], post.title)
-        self.assertEqual(notification['url'], post.get_absolute_url())
 
-        # This model does not send notifications
-        NoKnockPost.objects.create(
-            title='first post',
-            slug='first-post',
+    @database_sync_to_async
+    def get_noknock_post(title):
+        return NoKnockPost.objects.create(
+            title=title,
+            slug=slugify(title),
         )
-        self.assertIsNone(client.receive())
+
+    communicator = WebsocketCommunicator(application, "/knocker/notification/en/")
+    await communicator.connect()
+
+    # Post type which return notifications
+    post = await get_post('first post')
+    notification = json.loads(await communicator.receive_json_from())
+    assert notification['title'] == 'new {0}'.format(post._meta.verbose_name)
+    assert notification['message'] == post.title
+    assert notification['url'] == post.get_absolute_url()
+
+    # Post type without notifications
+    await get_noknock_post('first post')
+    assert await communicator.receive_nothing() is True
+    await communicator.disconnect()

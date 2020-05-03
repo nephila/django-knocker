@@ -12,3 +12,4 @@ Contributors
 
 * Adam Chainz
 * Daniel Rios
+* Daniel Santos

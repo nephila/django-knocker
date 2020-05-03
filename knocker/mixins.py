@@ -12,9 +12,7 @@ from django.utils.encoding import force_text
 from django.utils.translation import get_language, ugettext_lazy as _
 
 from .signals import notify_items_post_delete  # NOQA
-from .signals import (
-    notify_items, notify_items_post_save, notify_items_pre_delete, notify_items_pre_save,
-)
+from .signals import notify_items_post_save, notify_items_pre_delete, notify_items_pre_save
 
 
 class KnockerModel(object):
@@ -60,19 +58,19 @@ class KnockerModel(object):
         Disconnect signal from current model
         """
         pre_save.disconnect(
-            notify_items, sender=cls,
+            notify_items_pre_save, sender=cls,
             dispatch_uid='knocker_pre_save_{0}'.format(cls.__name__)
         )
         post_save.disconnect(
-            notify_items, sender=cls,
-            dispatch_uid='knocker_{0}'.format(cls.__name__)
+            notify_items_post_save, sender=cls,
+            dispatch_uid='knocker_post_save_{0}'.format(cls.__name__)
         )
         pre_delete.disconnect(
-            notify_items, sender=cls,
+            notify_items_pre_delete, sender=cls,
             dispatch_uid='knocker_pre_delete_{0}'.format(cls.__name__)
         )
         post_delete.disconnect(
-            notify_items, sender=cls,
+            notify_items_post_delete, sender=cls,
             dispatch_uid='knocker_post_delete_{0}'.format(cls.__name__)
         )
 
@@ -162,7 +160,6 @@ class KnockerModel(object):
         if self.should_knock(signal_type, created):
             with self._set_signal_type(signal_type):
                 for field, data in self._retrieve_data(None, self._knocker_data):
-                    print(field, data)
                     knock[field] = data
                 knock['action'] = created if created else signal_type.split('_')[1]
         return knock

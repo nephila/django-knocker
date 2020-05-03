@@ -2,11 +2,11 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from contextlib import contextmanager
-from threading import local
 
+from asgiref.local import Local
 from django.utils.translation import get_language, override
 
-_thread_locals = local()
+_thread_locals = Local()
 
 
 def notify_items_pre_save(**kwargs):
