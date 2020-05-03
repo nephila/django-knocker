@@ -87,9 +87,12 @@ Configuration
 API Changes
 -----------
 
-If you added a custom ``should_knock`` method, you must add the ``signal_type`` argument to match the current signature:
+If you added a custom ``should_knock`` or ``as_knock`` methods, you must add the ``signal_type`` argument to match the current signature:
 
 .. code-block::  python
 
    def should_knock(self, signal_type, created=False):
+       ...
+
+   def def as_knock(self, signal_type, created=False):
        ...
