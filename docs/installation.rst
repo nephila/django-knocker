@@ -2,42 +2,97 @@
 Installation
 ============
 
-* Install it
+* Install it:
 
-    $ pip install django-knocker
+  .. code-block:: bash
 
-* Add it to ``INSTALLED_APPS`` with channels::
+      pip install django-knocker
 
-    INSTALLED_APPS = [
-        ...
-        'channels,
-        'knocker',
-        ...
-    ]
+* Add it to ``INSTALLED_APPS`` with channels:
 
-* Load the ``knocker`` routing into channels configuration::
+  .. code-block:: python
 
-    CHANNEL_LAYERS={
-        'default': {
-            'BACKEND': 'asgi_redis.RedisChannelLayer',
-            'CONFIG': {
-                'hosts': [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
-            },
-            'ROUTING': 'myproject.routing.channel_routing',
-        },
-    }
+      INSTALLED_APPS = [
+          ...
+          'channels,
+          'knocker',
+          ...
+      ]
+
+* Load the ``knocker`` routing into channels configuration:
+
+  .. code-block:: python
+
+      CHANNEL_LAYERS={
+          'default': {
+              'BACKEND': 'channels_redis.core.RedisChannelLayer',
+              'CONFIG': {
+                  'hosts': [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+              }
+          },
+      }
+
+      ASGI_APPLICATION='myproject.routing.channel_routing',
 
   Check `channels documentation`_ for more detailed information on ``CHANNEL_LAYERS`` setup.
 
 .. _channels documentation: https://channels.readthedocs.io/en/latest/deploying.html
 
-* Add to ``myproject.routing.channel_routing.py`` the knocker routes::
+* Add to ``myproject.routing.channel_routing.py`` the knocker routes:
 
-    # -*- coding: utf-8 -*-
+  .. code-block:: python
 
-    from channels import include
-    from knocker.routing import channel_routing as knocker_routing
+      # -*- coding: utf-8 -*-
 
-    channel_routing = [
-        include(knocker_routing, path=r'^/notifications'),
-    ]
+      from channels.auth import AuthMiddlewareStack
+      from channels.routing import ProtocolTypeRouter, URLRouter
+      from django.urls import path
+      from knocker.routing import channel_routing as knocker_routing
+
+      application = ProtocolTypeRouter({
+          'websocket': AuthMiddlewareStack(
+              URLRouter([
+                  path('knocker/', knocker_routing),
+              ])
+          ),
+      })
+
+
+.. _upgrade:
+
+
+Upgrade
+=======
+
+Upgrade from channels 1 version of django-knocker require updating the configuration and minor changes
+
+Configuration
+-------------
+
+* Discard existing configuration
+* Rewrite the main router according to channels 2 specifications and include knocker router. Example:
+
+  .. code-block:: python
+
+      application = ProtocolTypeRouter({
+          'websocket': AuthMiddlewareStack(
+              URLRouter([
+                  path('knocker/', knocker_routing),
+              ])
+          ),
+      })
+
+
+
+API Changes
+-----------
+
+If you added a custom ``should_knock`` or ``as_knock`` methods, you must add the ``signal_type`` argument to match the current signature:
+
+.. code-block::  python
+
+   def should_knock(self, signal_type, created=False):
+       ...
+
+   def def as_knock(self, signal_type, created=False):
+       ...

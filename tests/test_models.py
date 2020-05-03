@@ -6,9 +6,10 @@ from django.utils.translation import get_language, override
 from mock import patch
 from parler.utils.context import smart_override
 
-from knocker.signals import pause_knocks, active_knocks
+from knocker.signals import active_knocks, pause_knocks
+
 from .base import BaseKnocker
-from .example_app.models import Post, MultiLanguagePost, NoKnockPost
+from .example_app.models import MultiLanguagePost, NoKnockPost, Post
 
 
 class KnockerTest(BaseKnocker):
@@ -32,7 +33,7 @@ class KnockerTest(BaseKnocker):
         for language in [get_language()]:
             with override(language):
                 for post in posts:
-                    knock_create = post.as_knock(True)
+                    knock_create = post.as_knock('post_save', True)
                     self.assertEqual(knock_create['title'],
                                      'new {0}'.format(post._meta.verbose_name))
                     self.assertEqual(knock_create['message'], post.title)
@@ -70,26 +71,26 @@ class KnockerTest(BaseKnocker):
                 with smart_override(language):
                     post.set_current_language(language)
                     if language != 'fr':
-                        knock_create = post.as_knock(True)
+                        knock_create = post.as_knock('post_save', True)
                         self.assertEqual(knock_create['title'],
                                          'new {0}'.format(post._meta.verbose_name))
                         self.assertEqual(knock_create['message'], post.title)
                         self.assertEqual(knock_create['language'], language)
-                        post.send_knock(True)
+                        post.send_knock('post_save', True)
 
-                        knock_create = post.as_knock(False)
+                        knock_create = post.as_knock('post_save', False)
                         self.assertEqual(knock_create['title'],
                                          'new {0}'.format(post._meta.verbose_name))
                         self.assertEqual(knock_create['message'], post.title)
                         self.assertEqual(knock_create['language'], language)
-                        post.send_knock(False)
+                        post.send_knock('post_save', False)
                     else:
-                        self.assertFalse(post.should_knock())
-                        self.assertFalse(post.as_knock(True))
-                        self.assertFalse(post.as_knock(False))
-                        post.send_knock(False)
+                        self.assertFalse(post.should_knock('post_save'))
+                        self.assertFalse(post.as_knock('post_save', True))
+                        self.assertFalse(post.as_knock('post_save', False))
+                        post.send_knock('post_save', False)
 
-    @patch('knocker.signals.notify_items', autospec=True)
+    @patch('knocker.signals.notify_items_post_save', autospec=True)
     def test_no_knock(self, handler):
         posts = []
         post_save.connect(handler, NoKnockPost, dispatch_uid='test_knocker_mock')
@@ -103,12 +104,13 @@ class KnockerTest(BaseKnocker):
         ))
         self.assertEqual(handler.call_count, 2)
 
-    @patch('knocker.mixins.notify_items')
+    @patch('knocker.mixins.notify_items_post_save')
     def test_signal(self, handler):
         post = Post.objects.create(
             title='signal post',
             slug='signal-post',
         )
+        print("CREATED", post_save.receivers)
         handler.assert_called_once()
         self.assertTrue(handler.return_value)
         handler.reset_mock()
@@ -121,8 +123,8 @@ class KnockerTest(BaseKnocker):
 
         with pause_knocks(post):
             post.title = 'pause title'
-            post.save()
             self.assertFalse(active_knocks(post))
+            post.save()
             handler.assert_not_called()
 
         post.title = 'mod title'

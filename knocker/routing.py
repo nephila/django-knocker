@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-from . import consumers
+from channels.routing import URLRouter
+from django.urls import path
 
-channel_routing = {
-    'websocket.connect': consumers.ws_connect,
-    'websocket.receive': consumers.ws_receive,
-    'websocket.disconnect': consumers.ws_disconnect,
-}
+from .consumers import KnockerConsumer
+
+# consumers can be freely appended: path ensure the correct match
+channel_routing = URLRouter([
+    path('notification/<str:language>/', KnockerConsumer),
+])

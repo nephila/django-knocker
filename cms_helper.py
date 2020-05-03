@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-import os
-
 from tempfile import mkdtemp
 
 HELPER_SETTINGS = dict(
     ROOT_URLCONF='tests.example_app.urls',
     INSTALLED_APPS=[
         'channels',
+        'sekizai',
+        'meta',
         'tests.example_app',
     ],
     LANGUAGES=(
@@ -31,27 +31,30 @@ HELPER_SETTINGS = dict(
             'hide_untranslated': False,
         }
     },
+    META_USE_SITES=True,
     FILE_UPLOAD_TEMP_DIR=mkdtemp(),
+    META_SITE_PROTOCOL='http',
+    ASGI_APPLICATION='tests.example_app.routing.application',
+    TEST_RUNNER='app_helper.pytest_runner.PytestTestRunner',
     CHANNEL_LAYERS={
         'default': {
-            'BACKEND': 'asgi_redis.RedisChannelLayer',
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
             'CONFIG': {
-                'hosts': [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+                'hosts': [('localhost', 6379)],
             },
-            'ROUTING': 'tests.example_app.routing.channel_routing',
         },
     }
 )
 
 
 def run():
-    from djangocms_helper import runner
+    from app_helper import runner
     runner.run('knocker')
 
 
 def setup():
     import sys
-    from djangocms_helper import runner
+    from app_helper import runner
     runner.setup('knocker', sys.modules[__name__], use_cms=False)
 
 if __name__ == "__main__":

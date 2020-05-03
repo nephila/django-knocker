@@ -2,7 +2,6 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from django.views.generic import DetailView, ListView
-
 from meta.views import MetadataMixin
 
 from .models import Post

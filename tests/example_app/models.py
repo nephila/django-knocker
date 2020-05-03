@@ -2,17 +2,17 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
+from django.urls import reverse
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-from parler.models import TranslatedFields, TranslatableModel
+from meta.models import ModelMeta
+from parler.models import TranslatableModel, TranslatedFields
+from six import python_2_unicode_compatible
 
 from knocker.mixins import KnockerModel
-from knocker.signals import notify_items
-from meta.models import ModelMeta
+from knocker.signals import notify_items_post_save
 
 
 @python_2_unicode_compatible
@@ -24,12 +24,12 @@ class Post(KnockerModel, ModelMeta, models.Model):
     slug = models.SlugField(_('slug'))
     abstract = models.TextField(_('Abstract'))
     meta_description = models.TextField(
-        verbose_name=_(u'Post meta description'),
+        verbose_name=_('Post meta description'),
         blank=True, default='')
-    meta_keywords = models.TextField(verbose_name=_(u'Post meta keywords'),
+    meta_keywords = models.TextField(verbose_name=_('Post meta keywords'),
                                      blank=True, default='')
     author = models.ForeignKey(User, verbose_name=_('Author'), null=True,
-                               blank=True)
+                               blank=True, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     date_published = models.DateTimeField(_('Published Since'),
@@ -38,7 +38,7 @@ class Post(KnockerModel, ModelMeta, models.Model):
                                               blank=True)
     main_image = models.ImageField(verbose_name=_('Main image'), blank=True,
                                    upload_to='images', null=True)
-    text = models.TextField(verbose_name=_(u'Post text'),
+    text = models.TextField(verbose_name=_('Post text'),
                             blank=True, default='')
     image_url = models.CharField(max_length=200, null=True, blank=True)
 
@@ -81,7 +81,7 @@ class MultiLanguagePost(KnockerModel, ModelMeta, TranslatableModel):
     def get_absolute_url(self, language):
         return reverse('post-detail', kwargs={'slug': self.slug})
 
-    def should_knock(self, created=False):
+    def should_knock(self, signal_type, created=False):
         return self.get_current_language() != 'fr'
 
 
@@ -101,4 +101,4 @@ class NoKnockPost(models.Model):
         return self.title
 
 
-post_save.connect(notify_items, sender=NoKnockPost)
+post_save.connect(notify_items_post_save, sender=NoKnockPost)

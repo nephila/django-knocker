@@ -43,3 +43,4 @@ output/*/index.html
 # Sphinx
 docs/_build
 .eggs
+local.sqlite
