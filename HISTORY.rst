@@ -6,9 +6,10 @@ History
 0.4.0 (unrelease)
 ++++++++++++++++++
 
-* Migrated to Chanels 2
+* Migrated to Channels 2
 * Added support for Django 2.2 / 3.0
 * Dropped support for Python 2
+* Dropped support for Django < 2.2
 
 0.3.3 (2018-01-01)
 ++++++++++++++++++
