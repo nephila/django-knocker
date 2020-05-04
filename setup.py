@@ -53,7 +53,7 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
-        'channels>=2.4',
+        'channels>=2.3',
         'django-meta>=1.4'
     ],
     test_suite='cms_helper.run',
