@@ -8,8 +8,8 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.conf import settings
 from django.db.models.signals import post_delete, post_save, pre_delete, pre_save
-from django.utils.encoding import force_text
-from django.utils.translation import get_language, ugettext_lazy as _
+from django.utils.encoding import force_str
+from django.utils.translation import get_language, gettext_lazy as _
 
 from .signals import notify_items_post_delete  # NOQA
 from .signals import notify_items_post_save, notify_items_pre_delete, notify_items_pre_save
@@ -90,8 +90,8 @@ class KnockerModel(object):
         """
         signal_type = self._get_signal_type()
         titles = {
-            'post_save': force_text(_('new {0}'.format(self._meta.verbose_name))),
-            'post_delete': force_text(_('deleted {0}'.format(self._meta.verbose_name)))
+            'post_save': force_str(_('new {0}'.format(self._meta.verbose_name))),
+            'post_delete': force_str(_('deleted {0}'.format(self._meta.verbose_name)))
         }
         return titles[signal_type]
 
