@@ -3,7 +3,7 @@
 History
 -------
 
-0.4.0 (unrelease)
+0.4.0 (2020-05-20)
 ++++++++++++++++++
 
 * Migrated to Channels 2
