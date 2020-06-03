@@ -4,7 +4,7 @@ mock>=3  # needed in python 3.5
 flake8>=2.1.0
 tox>=1.7.0
 django-app-helper==2.2.2
-django-parler
+django-parler==2.0.1
 pillow
 channels-redis
 django-sekizai
