@@ -3,7 +3,7 @@ coverage==5.1
 mock>=3  # needed in python 3.5
 flake8>=2.1.0
 tox>=1.7.0
-django-app-helper
+django-app-helper==2.2.2
 django-parler
 pillow
 channels-redis
