@@ -1,28 +1,23 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, print_function, unicode_literals
-
 import contextlib
 import json
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.conf import settings
-from django.db.models.signals import post_delete, post_save, pre_delete, pre_save
+from django.db.models.signals import post_save, pre_delete
 from django.utils.encoding import force_str
 from django.utils.translation import get_language, gettext_lazy as _
 
-from .signals import notify_items_post_delete  # NOQA
-from .signals import notify_items_post_save, notify_items_pre_delete, notify_items_pre_save
+from .signals import notify_items_post_save, notify_items_pre_delete
 
 
-class KnockerModel(object):
-
+class KnockerModel:
     _knocker_data = {
-        'title': 'get_knocker_title',
-        'message': 'get_knocker_message',
-        'icon': 'get_knocker_icon',
-        'url': 'get_absolute_url',
-        'language': 'get_knocker_language',
+        "title": "get_knocker_title",
+        "message": "get_knocker_message",
+        "icon": "get_knocker_icon",
+        "url": "get_absolute_url",
+        "language": "get_knocker_language",
     }
 
     def __new__(cls, *args, **kwargs):
@@ -35,21 +30,15 @@ class KnockerModel(object):
         """
         Connect signal to current model
         """
-        pre_save.connect(
-            notify_items_pre_save, sender=cls,
-            dispatch_uid='knocker_pre_save_{0}'.format(cls.__name__)
-        )
         post_save.connect(
-            notify_items_post_save, sender=cls,
-            dispatch_uid='knocker_post_save_{0}'.format(cls.__name__)
+            notify_items_post_save,
+            sender=cls,
+            dispatch_uid="knocker_post_save_{}".format(cls.__name__),
         )
         pre_delete.connect(
-            notify_items_pre_delete, sender=cls,
-            dispatch_uid='knocker_pre_delete_{0}'.format(cls.__name__)
-        )
-        post_delete.connect(
-            notify_items_post_delete, sender=cls,
-            dispatch_uid='knocker_post_delete_{0}'.format(cls.__name__)
+            notify_items_pre_delete,
+            sender=cls,
+            dispatch_uid="knocker_pre_delete_{}".format(cls.__name__),
         )
 
     @classmethod
@@ -57,21 +46,15 @@ class KnockerModel(object):
         """
         Disconnect signal from current model
         """
-        pre_save.disconnect(
-            notify_items_pre_save, sender=cls,
-            dispatch_uid='knocker_pre_save_{0}'.format(cls.__name__)
-        )
         post_save.disconnect(
-            notify_items_post_save, sender=cls,
-            dispatch_uid='knocker_post_save_{0}'.format(cls.__name__)
+            notify_items_post_save,
+            sender=cls,
+            dispatch_uid="knocker_post_save_{}".format(cls.__name__),
         )
         pre_delete.disconnect(
-            notify_items_pre_delete, sender=cls,
-            dispatch_uid='knocker_pre_delete_{0}'.format(cls.__name__)
-        )
-        post_delete.disconnect(
-            notify_items_post_delete, sender=cls,
-            dispatch_uid='knocker_post_delete_{0}'.format(cls.__name__)
+            notify_items_pre_delete,
+            sender=cls,
+            dispatch_uid="knocker_pre_delete_{}".format(cls.__name__),
         )
 
     def get_knocker_icon(self):
@@ -80,7 +63,7 @@ class KnockerModel(object):
 
         Defaults to the value of settings.KNOCKER_ICON_URL
         """
-        return getattr(settings, 'KNOCKER_ICON_URL', '')
+        return getattr(settings, "KNOCKER_ICON_URL", "")
 
     def get_knocker_title(self):
         """
@@ -90,8 +73,8 @@ class KnockerModel(object):
         """
         signal_type = self._get_signal_type()
         titles = {
-            'post_save': force_str(_('new {0}'.format(self._meta.verbose_name))),
-            'post_delete': force_str(_('deleted {0}'.format(self._meta.verbose_name)))
+            "post_save": force_str(_("new {}".format(self._meta.verbose_name))),
+            "post_delete": force_str(_("deleted {}".format(self._meta.verbose_name))),
         }
         return titles[signal_type]
 
@@ -110,7 +93,7 @@ class KnockerModel(object):
         This will call ``selg.get_current_language`` if available or the Django
         ``django.utils.translation.get_language()`` otherwise
         """
-        if hasattr(self, 'get_current_language'):
+        if hasattr(self, "get_current_language"):
             return self.get_current_language()
         else:
             return get_language()
@@ -126,10 +109,8 @@ class KnockerModel(object):
         :param created: True if the object has been created
         """
         should = {
-            'pre_save': False,
-            'pre_delete': False,
-            'post_save': True,
-            'post_delete': True,
+            "pre_delete": True,
+            "post_save": True,
         }
         return should[signal_type]
 
@@ -138,11 +119,11 @@ class KnockerModel(object):
         """
         Context processor that sets the signal_type on the current instance
 
-        :param signal_type: name of the catched signal
+        :param signal_type: name of the signal caught
         """
         self._signal_type = signal_type
         yield
-        delattr(self, '_signal_type')
+        delattr(self, "_signal_type")
 
     def _get_signal_type(self):
         """
@@ -150,7 +131,7 @@ class KnockerModel(object):
 
         :return: string
         """
-        return getattr(self, '_signal_type', '')
+        return getattr(self, "_signal_type", "")
 
     def as_knock(self, signal_type, created=False):
         """
@@ -161,7 +142,7 @@ class KnockerModel(object):
             with self._set_signal_type(signal_type):
                 for field, data in self._retrieve_data(None, self._knocker_data):
                     knock[field] = data
-                knock['action'] = created if created else signal_type.split('_')[1]
+                knock["action"] = created if created else signal_type.split("_")[1]
         return knock
 
     def send_knock(self, signal_type, created=False):
@@ -171,8 +152,5 @@ class KnockerModel(object):
         knock = self.as_knock(signal_type, created)
         if knock:
             channel_layer = get_channel_layer()
-            group = 'knocker-%s' % knock['language']
-            async_to_sync(channel_layer.group_send)(group, {
-                'type': 'knocker.saved',
-                'message': json.dumps(knock)
-            })
+            group = "knocker-%s" % knock["language"]
+            async_to_sync(channel_layer.group_send)(group, {"type": "knocker.saved", "message": json.dumps(knock)})

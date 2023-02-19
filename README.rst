@@ -16,12 +16,6 @@ Usage
 
 See https://django-knocker.readthedocs.io/en/latest/usage.html
 
-Upgrade
---------
-
-See https://django-knocker.readthedocs.io/en/latest/installation.html#upgrade for information
-about upgrading from djang-knocker 0.3 (channels 1).
-
 
 Features
 --------
