@@ -108,14 +108,11 @@ class KnockerModel:
         :param signal_type: type of signal between pre_save, post_save, pre_delete, post_delete
         :param created: True if the object has been created
         """
-        try:
-            should = {
-                "pre_delete": True,
-                "post_save": True,
-            }
-            return should[signal_type]
-        except Exception as e:
-            print("BBB", e)
+        should = {
+            "pre_delete": True,
+            "post_save": True,
+        }
+        return should[signal_type]
 
     @contextlib.contextmanager
     def _set_signal_type(self, signal_type):
@@ -124,12 +121,9 @@ class KnockerModel:
 
         :param signal_type: name of the signal caught
         """
-        try:
-            self._signal_type = signal_type
-            yield
-            delattr(self, "_signal_type")
-        except Exception as e:
-            print("AAAA", e)
+        self._signal_type = signal_type
+        yield
+        delattr(self, "_signal_type")
 
     def _get_signal_type(self):
         """
@@ -155,13 +149,8 @@ class KnockerModel:
         """
         Send the knock in the associated channels Group
         """
-        try:
-            knock = self.as_knock(signal_type, created)
-            print("KNOC", knock)
-            if knock:
-                channel_layer = get_channel_layer()
-                group = "knocker-%s" % knock["language"]
-                print("GGG", group, channel_layer, json.dumps(knock))
-                async_to_sync(channel_layer.group_send)(group, {"type": "knocker.saved", "message": json.dumps(knock)})
-        except Exception as e:
-            print("ERRR", e)
+        knock = self.as_knock(signal_type, created)
+        if knock:
+            channel_layer = get_channel_layer()
+            group = "knocker-%s" % knock["language"]
+            async_to_sync(channel_layer.group_send)(group, {"type": "knocker.saved", "message": json.dumps(knock)})

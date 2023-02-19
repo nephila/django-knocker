@@ -14,7 +14,6 @@ class KnockerConsumer(JsonWebsocketConsumer):
         Attach the consumer to the selected language
         """
         lang = self.scope["url_route"]["kwargs"].get("language")
-        print("GROUP", "knocker-%s" % lang)
         return [
             "knocker-%s" % lang,
         ]

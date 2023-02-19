@@ -20,23 +20,18 @@ def notify_items(signal_type, **kwargs):
     """
     instance = kwargs.get("instance")
     created = kwargs.get("created", False)
-    print("NOTIFY", active_knocks(instance))
     if hasattr(instance, "send_knock") and active_knocks(instance):
-        print("ENTER")
         try:
             # This is a stupid generic interface for multilanguage models (hvad / parler)
             if instance.pk and hasattr(instance, "get_available_languages"):
                 langs = instance.get_available_languages()
             else:
                 langs = [get_language()]
-            print(langs)
             for lang in langs:
                 with override(lang):
-                    print("SEND", signal_type, created)
                     instance.send_knock(signal_type, created)
             return True
-        except AttributeError as e:  # pragma: no cover
-            print("EEEE", e)
+        except AttributeError:  # pragma: no cover
             pass
     return False
 
