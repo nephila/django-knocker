@@ -6,26 +6,30 @@ django-knocker
 
 Channels-based desktop notification system
 
+***************
 Documentation
--------------
+***************
 
 The full documentation is at https://django-knocker.readthedocs.io.
 
+***************
 Usage
------
+***************
 
 See https://django-knocker.readthedocs.io/en/latest/usage.html
 
 
+***************
 Features
---------
+***************
 
 * Sends desktop notifications to connected browsers
 * Multilianguage support (with `django-parler`_ and `django-hvad`_)
 * Uses `django-meta`_ API for a consistent metadata handling
 
+***************
 Running Tests
--------------
+***************
 
 Does the code actually work?
 
@@ -35,8 +39,9 @@ Does the code actually work?
     (myenv) $ pip install -r requirements-test.txt
     (myenv) $ python cms_helper.py
 
+***************
 Credits
--------
+***************
 
 Tools used in rendering this package:
 
