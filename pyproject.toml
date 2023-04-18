@@ -28,3 +28,14 @@ verbose = 0
 quiet = false
 whitelist-regex = []
 color = true
+
+[tool.isort]
+profile = "black"
+
+[tool.ruff]
+ignore = []
+line-length = 119
+target-version = "py310"
+
+[tool.ruff.mccabe]
+max-complexity = 10
