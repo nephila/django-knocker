@@ -9,4 +9,3 @@ jobs:
       - name: Logging
         run: |
           echo '${{toJSON(github.event)}}'
-
